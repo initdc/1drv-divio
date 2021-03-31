@@ -1,13 +1,21 @@
-FROM golang:1.16
+FROM golang:alpine as builder
 
-WORKDIR /go/src/one-direct
-COPY . .
-RUN go get
+ENV ENV GO111MODULE=on \
+    CGO_ENABLED=0 
+
+WORKDIR /go/src/oneDirect/
+COPY *.go go.mod ./
+RUN go mod download
 RUN go build -o main *.go
 
-ENV PORT=80
+# runtime
+FROM alpine
+ENV PORT 80
 
-EXPOSE 80/tcp
-EXPOSE 80/udp
+WORKDIR /root/
+COPY assets/ ./assets/
+COPY *.html *.svg ./
+COPY --from=builder /go/src/oneDirect/main ./
+RUN apk add --no-cache ca-certificates
 
-ENTRYPOINT ["/go/src/one-direct/main"]
+CMD ["/root/main"]
