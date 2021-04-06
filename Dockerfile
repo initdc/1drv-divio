@@ -16,6 +16,6 @@ WORKDIR /root/
 COPY assets/ ./assets/
 COPY *.html *.svg ./
 COPY --from=builder /go/src/oneDirect/main ./
-RUN apk add --no-cache ca-certificates
+# RUN apk add --no-cache ca-certificates
 
 CMD ["/root/main"]
