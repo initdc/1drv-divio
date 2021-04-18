@@ -13,7 +13,8 @@ FROM alpine
 ENV PORT 80
 
 WORKDIR /root/
-COPY assets/ ./assets/
+COPY js/ ./js/
+COPY css/ ./css/
 COPY *.html *.svg ./
 COPY --from=builder /go/src/oneDirect/main ./
 # RUN apk add --no-cache ca-certificates
